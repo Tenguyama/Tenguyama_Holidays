@@ -1,0 +1,8 @@
+<?php
+$message = $block->getCurrentHolidayMessage();
+if (!empty($message)) :
+    ?>
+    <div class="custom-message">
+        <?= $message ?>
+    </div>
+<?php endif; ?>

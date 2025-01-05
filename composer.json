@@ -1,0 +1,10 @@
+{
+    "name": "Tenguyama/Holidays",
+    "description": "My first Magento 2 module",
+    "type": "magento2-module",
+    "autoload": {
+        "psr-4": {
+            "Tenguyama\\Holidays\\": "app/code/Tenguyama/Holidays/"
+        }
+    }
+}
