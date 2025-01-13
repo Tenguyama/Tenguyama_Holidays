@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="tenguyama_holidays" resource="default" engine="innodb" comment="Holiday Information Table">
+        <column name="holiday_id" xsi:type="int" unsigned="true" nullable="false" identity="true" comment="Holiday ID"/>
+        <column name="name" xsi:type="varchar" length="255" nullable="false" comment="Holiday Name"/>
+        <column name="start_date" xsi:type="date" nullable="false" comment="Start Date"/>
+        <column name="exact_date" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" comment="Exact Date"/>
+        <column name="end_date" xsi:type="date" nullable="true" comment="End Date"/>
+        <column name="greeting_text" xsi:type="varchar" length="256" nullable="true" comment="Greeting Text"/>
+        <column name="is_active" xsi:type="boolean" nullable="false" default="0" comment="Is Active"/>
+
+        <!-- Primary Key -->
+        <constraint xsi:type="primary" referenceId="PRIMARY" >
+            <column name="holiday_id"/>
+        </constraint>
+
+        <!-- Index -->
+        <index referenceId="TENGUYAMA_HOLIDAYS_DATE_INDEX" indexType="btree">
+            <column name="start_date"/>
+            <column name="end_date"/>
+        </index>
+    </table>
+</schema>
