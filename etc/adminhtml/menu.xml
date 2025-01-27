@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Tenguyama_Holidays::holidays" title="Holidays"
+             module="Tenguyama_Holidays" sortOrder="51"
+             resource="Tenguyama_Holidays::holidays"/>
+        <add id="Tenguyama_Holidays::holiday" title="Manage holidays"
+             module="Tenguyama_Holidays" sortOrder="10"
+             action="tenguyama_holidays/holiday/index" resource="Tenguyama_Holidays::holiday"
+             parent="Tenguyama_Holidays::holidays"/>
+        <add id="Tenguyama_Holidays::holiday_configuration"
+             title="Configuration" module="Tenguyama_Holidays" sortOrder="99"
+             parent="Tenguyama_Holidays::holidays"
+             action="adminhtml/system_config/edit/section/holiday"
+             resource="Tenguyama_Holidays::holiday_configuration"/>
+    </menu>
+</config>

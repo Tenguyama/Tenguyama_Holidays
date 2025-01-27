@@ -1,7 +1,12 @@
 <?php
 namespace Tenguyama\Holidays\Model\ResourceModel\Holiday;
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+
+use \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+class Collection extends AbstractCollection
 {
+    protected $_idFieldName = 'holiday_id';
+    protected $_eventPrefix = 'tenguyama_holidays_holiday_collection';
+    protected $_eventObject = 'holiday_collection';
     /**
      * Define resource model
      *

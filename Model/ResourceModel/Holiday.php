@@ -1,9 +1,12 @@
 <?php
 namespace Tenguyama\Holidays\Model\ResourceModel;
-class Holiday extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+
+use \Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use \Magento\Framework\Model\ResourceModel\Db\Context;
+class Holiday extends AbstractDb
 {
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context
+        Context $context
     )
     {
         parent::__construct($context);

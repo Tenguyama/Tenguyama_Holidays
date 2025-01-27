@@ -2,13 +2,15 @@
 namespace Tenguyama\Holidays\Block;
 
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use \Tenguyama\Holidays\ViewModel\HolidayViewModel;
 class CustomMessage extends Template
 {
     private $holidayViewModel;
 
     public function __construct(
-        Template\Context $context,
-        \Tenguyama\Holidays\ViewModel\HolidayViewModel $holidayViewModel,
+        Context $context,
+        HolidayViewModel $holidayViewModel,
         array $data = []
     ) {
         $this->holidayViewModel = $holidayViewModel;

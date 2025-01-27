@@ -2,7 +2,7 @@
 namespace Tenguyama\Holidays\ViewModel;
 
 use Magento\Framework\View\Element\Block\ArgumentInterface;
-use Tenguyama\Holidays\Model\ResourceModel\Holiday\CollectionFactory;
+use Tenguyama\Holidays\Model\ResourceModel\Holiday\Collection as CollectionFactory;
 
 class HolidayViewModel implements ArgumentInterface
 {
