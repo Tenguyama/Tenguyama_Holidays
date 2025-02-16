@@ -4,8 +4,8 @@
         <column name="holiday_id" xsi:type="int" unsigned="true" nullable="false" identity="true" comment="Holiday ID"/>
         <column name="name" xsi:type="varchar" length="255" nullable="false" comment="Holiday Name"/>
         <column name="start_date" xsi:type="date" nullable="false" comment="Start Date"/>
-        <column name="exact_date" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" comment="Exact Date"/>
-        <column name="end_date" xsi:type="date" nullable="true" comment="End Date"/>
+        <column name="exact_date" xsi:type="date" nullable="false"  comment="Exact Date"/>
+        <column name="end_date" xsi:type="date" nullable="false" comment="End Date"/>
         <column name="greeting_text" xsi:type="varchar" length="256" nullable="true" comment="Greeting Text"/>
         <column name="is_active" xsi:type="boolean" nullable="false" default="0" comment="Is Active"/>
 

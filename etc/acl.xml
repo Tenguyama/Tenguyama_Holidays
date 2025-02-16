@@ -6,7 +6,11 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Tenguyama_Holidays::holidays"
                           title="Holidays" sortOrder="51">
-                    <resource id="Tenguyama_Holidays::holiday" title="Holiday" sortOrder="10"/>
+
+                    <resource id="Tenguyama_Holidays::holiday" title="Holiday" sortOrder="10">
+                        <resource id="Tenguyama_Holidays::holiday_delete" title="Delete Holidays" sortOrder="20"/>
+                    </resource>
+
                     <resource id="Tenguyama_Holidays::holiday_configuration" title="Configuration" sortOrder="99" />
                 </resource>
                 <resource id="Magento_Backend::stores"><resource id="Magento_Backend::stores_settings">

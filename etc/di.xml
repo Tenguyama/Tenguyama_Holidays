@@ -1,25 +1,65 @@
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type
-        name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+
+    <virtualType name="TenguyamaHolidaysFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
         <arguments>
-            <argument name="collections" xsi:type="array">
-                <item name="tenguyama_holidays_holiday_listing_data_source" xsi:type="string">
-                    Tenguyama\Holidays\Model\ResourceModel\Holiday\Collection
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="TenguyamaHolidaysFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+<!--            <argument name="collection" xsi:type="object" shared="false">Tenguyama\Holidays\Model\ResourceModel\Holiday\Collection</argument>-->
+            <argument name="collection" xsi:type="object" shared="false">Tenguyama\Holidays\Model\ResourceModel\Holiday\Grid\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">TenguyamaHolidaysFilterPool</argument>
+        </arguments>
+    </virtualType>
+
+<!--    <type name="Tenguyama\Holidays\Model\DataProvider">-->
+<!--        <arguments>-->
+<!--            <argument name="holidayCollectionFactory" xsi:type="object">Tenguyama\Holidays\Model\ResourceModel\Holiday\CollectionFactory</argument>-->
+<!--        </arguments>-->
+<!--    </type>-->
+
+<!--    <type name="Tenguyama\Holidays\Model\ResourceModel\Holiday\Collection">-->
+<!--        <arguments>-->
+<!--            <argument name="entityFactory" xsi:type="object">Magento\Framework\Data\Collection\EntityFactoryInterface</argument>-->
+<!--            <argument name="logger" xsi:type="object">Psr\Log\LoggerInterface</argument>-->
+<!--            <argument name="fetchStrategy" xsi:type="object">Magento\Framework\Data\Collection\Db\FetchStrategyInterface</argument>-->
+<!--            <argument name="eventManager" xsi:type="object">Magento\Framework\Event\ManagerInterface</argument>-->
+<!--            <argument name="connection" xsi:type="object">Magento\Framework\Model\ResourceModel\Db\Connection</argument>-->
+<!--        </arguments>-->
+<!--    </type>-->
+
+    <type name="Tenguyama\Holidays\Model\ResourceModel\Holiday\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">tenguyama_holidays</argument>
+            <argument name="eventPrefix" xsi:type="string">tenguyama_holidays_holiday_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">holiday_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Tenguyama\Holidays\Model\ResourceModel\Holiday</argument>
+        </arguments>
+    </type>
+<!--    TODO функціонал масової зміни активності не працює (нема значень для вибору), поки не зрозумів в чому проблема -->
+    <type name="Tenguyama\Holidays\Ui\Component\MassAction\Status\Options">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="urlPath" xsi:type="string">*/*/massStatus</item>
+                <item name="paramName" xsi:type="string">status</item>
+                <item name="confirm" xsi:type="array">
+                    <item name="title" xsi:type="string" translatable="true">Change Status</item>
+                    <item name="message" xsi:type="string" translatable="true">Are you sure you wan't to update selected items status?</item>
                 </item>
             </argument>
         </arguments>
     </type>
-
-
-
-    <virtualType name="Tenguyama\Holidays\Model\ResourceModel\Holiday\Collection"
-                 type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
-            <argument name="mainTable" xsi:type="string">tenguyama_holidays</argument>
-            <argument name="resourceModel" xsi:type="string">Tenguyama\Holidays\Model\ResourceModel\Holiday</argument>
+            <argument name="collections" xsi:type="array">
+                <item name="tenguyama_holidays_holiday_listing_data_source" xsi:type="string">Tenguyama\Holidays\Model\ResourceModel\Holiday\Grid\Collection</item>
+<!--                <item name="tenguyama_holidays_holiday_listing_data_source" xsi:type="string">Tenguyama\Holidays\Model\ResourceModel\Holiday\Collection</item>-->
+            </argument>
         </arguments>
-    </virtualType>
-
-
+    </type>
 </config>

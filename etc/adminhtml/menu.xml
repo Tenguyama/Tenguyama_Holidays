@@ -5,10 +5,21 @@
         <add id="Tenguyama_Holidays::holidays" title="Holidays"
              module="Tenguyama_Holidays" sortOrder="51"
              resource="Tenguyama_Holidays::holidays"/>
+<!--        Старий варіант, як я зрозумів екшн тут дьоргає контроллер Controller/Adminhtml/Holiday/Index-->
+<!--        <add id="Tenguyama_Holidays::holiday" title="Manage holidays"-->
+<!--             module="Tenguyama_Holidays" sortOrder="10"-->
+<!--             action="tenguyama_holidays/holiday/index" resource="Tenguyama_Holidays::holiday"-->
+<!--             parent="Tenguyama_Holidays::holidays"/>-->
         <add id="Tenguyama_Holidays::holiday" title="Manage holidays"
              module="Tenguyama_Holidays" sortOrder="10"
-             action="tenguyama_holidays/holiday/index" resource="Tenguyama_Holidays::holiday"
+             action="tenguyama_holidays/index/index" resource="Tenguyama_Holidays::holiday"
              parent="Tenguyama_Holidays::holidays"/>
+
+
+
+
+
+
         <add id="Tenguyama_Holidays::holiday_configuration"
              title="Configuration" module="Tenguyama_Holidays" sortOrder="99"
              parent="Tenguyama_Holidays::holidays"
