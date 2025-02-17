@@ -5,7 +5,7 @@
         <tab id="tenguyama" translate="label" sortOrder="10">
             <label>Tenguyama</label>
         </tab>
-        <section id="holiday" translate="label" sortOrder="130"
+        <section id="holidays" translate="label" sortOrder="130"
                  showInDefault="1" showInWebsite="1" showInStore="1">
             <class>separator-top</class>
             <label>Holidays</label>

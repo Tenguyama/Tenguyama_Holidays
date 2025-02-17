@@ -21,8 +21,7 @@ class HolidayViewModel implements ArgumentInterface
 
     public function getCurrentHoliday()
     {
-//        $currentDate = (new DateTime())->format('Y-m-d');
-        $currentDate =  $this->timezone->date(new DateTime())->format('Y-m-d');
+        $currentDate =  $this->timezone->date(new DateTime())->format('Y-m-d H:i:s');
 
         $collection = $this->holidayCollectionFactory->create();
         $collection->addFieldToFilter('is_active', ['eq' => 1])

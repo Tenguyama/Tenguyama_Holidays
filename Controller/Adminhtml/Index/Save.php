@@ -3,6 +3,7 @@
 namespace Tenguyama\Holidays\Controller\Adminhtml\Index;
 
 use DateTime;
+use DateTimeZone;
 use Magento\Backend\App\Action;
 use Magento\Backend\Model\Session;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
@@ -64,31 +65,19 @@ class Save extends Action{
             return $this->returnWithError(__('Name, Exact Date, Start Date and End Date are required.'), $holidayId);
         }
 
-        /*
-        TODO треба щось думати з таймзоною, бо
-        -значення яке вводиться в інпут має таким і зберігатись, бо користувач ставить його вдповідно своєї таймзони
-        -відповідно дефотлну обробку маженти в гріді адмінки я вимикаю, щоб користувач бачив те що і створював
-        -але буде присутня певна невідповідність на фронті
+        $userTimezone = $this->timezone->getConfigTimezone();
 
-        як вихід переробити з звичайної дати на дату-час, тоді впринципі все ок буде - певне так і зроблю перед тим як робити знижку
-        */
+        $data['start_date'] = $this->convertToUtc($data['start_date'], $userTimezone);
+        $data['end_date'] = $this->convertToUtc($data['end_date'], $userTimezone);
+        $data['exact_date'] = $this->convertToUtc($data['exact_date'], $userTimezone);
 
-
-        $startDateUtc = (new DateTime($data['start_date']))->format('Y-m-d');
-        $endDateUtc = (new DateTime($data['end_date']))->format('Y-m-d');
-        $exactDateUtc = (new DateTime($data['exact_date']))->format('Y-m-d');
-
-        $data['start_date'] = $startDateUtc;
-        $data['end_date'] = $endDateUtc;
-        $data['exact_date'] = $exactDateUtc;
-
-        if ($endDateUtc < $startDateUtc) {
+        if ($data['end_date'] < $data['start_date']) {
             return $this->returnWithError(__('End Date cannot be earlier than Start Date'), $holidayId);
         }
-        if ($exactDateUtc < $startDateUtc || $exactDateUtc > $endDateUtc) {
+        if ($data['exact_date'] < $data['start_date'] || $data['exact_date'] > $data['end_date']) {
             return $this->returnWithError(__('Exact Date must be within the Start and End Date range'), $holidayId);
         }
-        if ($this->isOverlappingHoliday($startDateUtc, $endDateUtc, $holidayId)) {
+        if ($this->isOverlappingHoliday($data['start_date'], $data['end_date'], $holidayId)) {
             return $this->returnWithError(__('The selected date range overlaps with an existing holiday.'), $holidayId);
         }
 
@@ -101,8 +90,6 @@ class Save extends Action{
     private function isOverlappingHoliday($startDate, $endDate, $excludeId = null)
     {
         $connection = $this->holidayModel->getResource()->getConnection();
-
-
 
         // Підготовлений запит
         $select = $connection->select()
@@ -124,7 +111,18 @@ class Save extends Action{
         $result = $connection->fetchOne($select);
         return (int)$result > 0;
     }
-
+    private function convertToUtc($date, $userTimezone)
+    {
+        /*
+         * Логіка наступна:
+         * - дата яку вводить користувач вже в його таймзоні (нехай +3, не суть)
+         * - для коректного відображення на фронті і в гріді адмінки, я маю конвертувати її в +0 при збереженні
+         * - після чого Magento\Framework\Stdlib\DateTime\TimezoneInterface - без проблем з +0 зробе ту, яка задана в адмінці
+         */
+        $dateTime = new DateTime($date . ' 00:00:00', new DateTimeZone($userTimezone));
+        $dateTime->setTimezone(new DateTimeZone('UTC'));
+        return $dateTime->format('Y-m-d H:i:s');
+    }
     /**
      * Повертає користувача назад з помилкою.
      */

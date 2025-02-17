@@ -299,9 +299,8 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="label" xsi:type="string" translate="true">Start Date</item>
-                    <item name="dateFormat" xsi:type="string">dd-MM-yyyy</item>
+                    <item name="dateFormat" xsi:type="string">dd-MM-yyyy HH:mm:ss</item>
                     <item name="sortOrder" xsi:type="number">4</item>
-                    <item name="timezone" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
@@ -313,9 +312,8 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="label" xsi:type="string" translate="true">End Date</item>
-                    <item name="dateFormat" xsi:type="string">dd-MM-yyyy</item>
+                    <item name="dateFormat" xsi:type="string">dd-MM-yyyy HH:mm:ss</item>
                     <item name="sortOrder" xsi:type="number">5</item>
-                    <item name="timezone" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
@@ -327,9 +325,8 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="label" xsi:type="string" translate="true">Exact Date</item>
-                    <item name="dateFormat" xsi:type="string">dd-MM-yyyy</item>
+                    <item name="dateFormat" xsi:type="string">dd-MM-yyyy HH:mm:ss</item>
                     <item name="sortOrder" xsi:type="number">6</item>
-                    <item name="timezone" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
