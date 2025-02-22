@@ -8,5 +8,13 @@
                    before="breadcrumbs"
             />
         </referenceContainer>
+        <referenceContainer name="product.info.main">
+            <block class="Tenguyama\Holidays\Block\CustomAttribute"
+                   name="product_custom_attribute"
+                   template="Tenguyama_Holidays::custom_attribute.phtml"
+                   after="product.info.price"
+                   before="product.price.tier"
+            />
+        </referenceContainer>
     </body>
 </page>

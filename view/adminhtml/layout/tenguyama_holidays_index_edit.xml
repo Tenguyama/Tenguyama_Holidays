@@ -4,6 +4,11 @@
     <body>
         <referenceContainer name="content">
             <uiComponent name="tenguyama_holidays_form"/>
+<!--            <block class="Tenguyama\Holidays\Block\Adminhtml\Form\CustomerGroupSelector"-->
+<!--                   name="customer_group_selector"-->
+<!--                   template="Tenguyama_Holidays::customer_group_selector.phtml"-->
+<!--                   after="is_active"-->
+<!--            />-->
         </referenceContainer>
     </body>
 </page>

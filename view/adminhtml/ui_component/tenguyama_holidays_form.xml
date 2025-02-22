@@ -23,7 +23,7 @@
 
     <dataSource name="tenguyama_holidays_form_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Tenguyama\Holidays\Model\DataProvider</argument>
+            <argument name="class" xsi:type="string">Tenguyama\Holidays\Model\HolidayDataProvider</argument>
             <argument name="name" xsi:type="string">tenguyama_holidays_form_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">holiday_id</argument>
             <argument name="requestFieldName" xsi:type="string">holiday_id</argument>
@@ -56,6 +56,10 @@
                     <item name="label" xsi:type="string" translate="true">Holiday Name</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="dataScope" xsi:type="string">name</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                        <item name="validate-no-empty" xsi:type="boolean">true</item>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -67,6 +71,10 @@
                     <item name="label" xsi:type="string" translate="true">Start Date</item>
                     <item name="formElement" xsi:type="string">date</item>
                     <item name="dataScope" xsi:type="string">start_date</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                        <item name="validate-date" xsi:type="boolean">true</item>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -78,6 +86,10 @@
                     <item name="label" xsi:type="string" translate="true">End Date</item>
                     <item name="formElement" xsi:type="string">date</item>
                     <item name="dataScope" xsi:type="string">end_date</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                        <item name="validate-date" xsi:type="boolean">true</item>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -89,6 +101,10 @@
                     <item name="label" xsi:type="string" translate="true">Exact Date</item>
                     <item name="formElement" xsi:type="string">date</item>
                     <item name="dataScope" xsi:type="string">exact_date</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                        <item name="validate-date" xsi:type="boolean">true</item>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -100,6 +116,44 @@
                     <item name="label" xsi:type="string" translate="true">Greeting Text</item>
                     <item name="formElement" xsi:type="string">textarea</item>
                     <item name="dataScope" xsi:type="string">greeting_text</item>
+                </item>
+            </argument>
+        </field>
+
+        <!-- Поле для % знижки -->
+        <field name="discount">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">number</item>
+                    <item name="label" xsi:type="string" translate="true">Discount Percentage</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                        <item name="validate-number" xsi:type="boolean">true</item>
+                        <item name="validate-zero-or-greater" xsi:type="boolean">true</item>
+                        <item name="validate-number-range" xsi:type="array">
+                            <item name="min" xsi:type="number">0</item>
+                            <item name="max" xsi:type="number">100</item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+
+
+
+        <field name="customer_group">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Tenguyama\Holidays\Model\Config\Source\HolidayOptions</item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Customer group</item>
+                    <item name="formElement" xsi:type="string">multiselect</item>
+                    <item name="dataScope" xsi:type="string">customer_group</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                        <item name="validate-no-empty" xsi:type="boolean">true</item>
+                    </item>
                 </item>
             </argument>
         </field>

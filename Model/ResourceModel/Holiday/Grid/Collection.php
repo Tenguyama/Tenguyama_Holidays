@@ -4,6 +4,7 @@ namespace Tenguyama\Holidays\Model\ResourceModel\Holiday\Grid;
 use Magento\Framework\View\Element\UiComponent\DataProvider\Document as HolidayModel;
 use Tenguyama\Holidays\Model\ResourceModel\Holiday\Collection as HolidayCollection;
 use Magento\Framework\Api\Search\SearchResultInterface;
+use Tenguyama\Holidays\Model\Holiday;
 class Collection extends HolidayCollection implements SearchResultInterface
 {
 
@@ -11,9 +12,8 @@ class Collection extends HolidayCollection implements SearchResultInterface
 
     protected $_eventPrefix = 'tenguyama_holidays_holiday_grid_collection';
     protected $_eventObject = 'holiday_grid_collection';
+    protected Holiday $holidayModel;
 
-
-    // @codingStandardsIgnoreStart
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
         \Psr\Log\LoggerInterface $logger,
@@ -32,9 +32,8 @@ class Collection extends HolidayCollection implements SearchResultInterface
         $this->_eventObject = $eventObject;
         $this->_init($model, $resourceModel);
         $this->setMainTable($mainTable);
+        $this->holidayModel = \Magento\Framework\App\ObjectManager::getInstance()->create(Holiday::class); // створення об'єкта Holiday
     }
-
-    // @codingStandardsIgnoreEnd
 
     public function getAggregations()
     {
@@ -83,9 +82,6 @@ class Collection extends HolidayCollection implements SearchResultInterface
     }
     public function getItems()
     {
-//        return $this->getAllItems();
         return parent::getItems(); // викликає метод батьківського класу для отримання елементів
-
     }
-
 }

@@ -24,4 +24,5 @@
             <column name="end_date"/>
         </index>
     </table>
+
 </schema>

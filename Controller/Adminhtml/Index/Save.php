@@ -8,25 +8,33 @@ use Magento\Backend\App\Action;
 use Magento\Backend\Model\Session;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Tenguyama\Holidays\Model\Holiday;
-use Zend_Db_Expr;
+use Tenguyama\Holidays\Model\HolidayCustomerGroupFactory;
+use Tenguyama\Holidays\Model\ResourceModel\HolidayCustomerGroup\CollectionFactory as HolidayCustomerGroupCollectionFactory;
+
 
 class Save extends Action{
 
-    protected $holidayModel;
-    protected $adminsession;
-    private $timezone;
+    protected HolidayCustomerGroupFactory $holidayCustomerGroupFactory;
+    protected HolidayCustomerGroupCollectionFactory $holidayCustomerGroupCollectionFactory;
+    protected Holiday $holidayModel;
+    protected Session $adminsession;
+    private TimezoneInterface $timezone;
 
 
     public function __construct(
         Action\Context $context,
         TimezoneInterface $timezone,
         Holiday $holidayModel,
-        Session $adminsession
+        Session $adminsession,
+        HolidayCustomerGroupFactory $holidayCustomerGroupFactory,
+        HolidayCustomerGroupCollectionFactory $holidayCustomerGroupCollectionFactory
     ){
         parent::__construct($context);
         $this->holidayModel = $holidayModel;
         $this->adminsession = $adminsession;
         $this->timezone = $timezone;
+        $this->holidayCustomerGroupFactory = $holidayCustomerGroupFactory;
+        $this->holidayCustomerGroupCollectionFactory = $holidayCustomerGroupCollectionFactory;
     }
 
     public function execute()
@@ -38,6 +46,7 @@ class Save extends Action{
             return $resultRedirect->setPath('*/*/');
         }
 
+        //Беру ідентифікатор для перевірки пететину, щоб прибрати з перевірки даний запис, якщо йде оновлення
         $holidayId = $this->getRequest()->getParam('holiday_id');
 
         $validationResult = $this->validateBeforeSave($data, $holidayId);
@@ -46,9 +55,20 @@ class Save extends Action{
         }
 
         try {
-            $holiday = $this->holidayModel->load($holidayId);
+            if (!empty($data['holiday_id'])) {
+                $holiday = $this->holidayModel->load($data['holiday_id']);
+            } else {
+                $holiday = $this->holidayModel;
+            }
             $holiday->setData($data);
             $holiday->save();
+            $holidayId = $holiday->getId();
+
+            // Важливо саме після сейву св'ята, щоб якщо новий запис створюється я отримав актуальний ідентифікатор
+            if (isset($data['customer_group'])) {
+                $this->saveCustomerGroups($holidayId, $data['customer_group']);
+            }
+
 
             $this->messageManager->addSuccessMessage(__('You saved the Holiday.'));
             $this->adminsession->setFormData(false);
@@ -61,7 +81,16 @@ class Save extends Action{
 
     private function validateBeforeSave(array &$data, $holidayId)
     {
-        if (empty($data['name']) || empty($data['start_date']) || empty($data['end_date']) || empty($data['exact_date'])) {
+        /**
+         * Хоч додав валідацію в формі, але про всяк випадок залишу продубльовним перед обробкою
+         */
+        if (empty($data['name']) ||
+            empty($data['discount']) ||
+            empty($data['customer_group']) ||
+            empty($data['start_date']) ||
+            empty($data['end_date']) ||
+            empty($data['exact_date']))
+        {
             return $this->returnWithError(__('Name, Exact Date, Start Date and End Date are required.'), $holidayId);
         }
 
@@ -87,7 +116,7 @@ class Save extends Action{
     /**
      * Перевіряє, чи перетинається новий період із вже існуючими.
      */
-    private function isOverlappingHoliday($startDate, $endDate, $excludeId = null)
+    private function isOverlappingHoliday($startDate, $endDate, $holidayId = null)
     {
         $connection = $this->holidayModel->getResource()->getConnection();
 
@@ -97,7 +126,7 @@ class Save extends Action{
                 ['count' => new \Zend_Db_Expr('COUNT(*)')]
             )
             ->where("
-                holiday_id != '".$excludeId."'
+                holiday_id != '".$holidayId."'
                 AND
                 (
                     (start_date <= '".$startDate."' AND end_date >= '".$startDate."')
@@ -147,6 +176,43 @@ class Save extends Action{
         }
 
         return $resultRedirect->setPath('*/*/');
+    }
+
+    /**
+     * Збереження зв'язків багато до багатьох відповідно свят до груп користувачів
+     */
+    protected function saveCustomerGroups($holidayId, $customerGroupIds)
+    {
+        // Отримуємо всі поточні групи для цього holiday_id
+        $existingGroups = $this->holidayCustomerGroupCollectionFactory->create()
+            ->addFieldToFilter('holiday_id', $holidayId)
+            ->getColumnValues('customer_group_id');
+
+        $customerGroupIds = array_map('intval', (array) $customerGroupIds);
+
+        // Визначаємо групи, які треба додати
+        $groupsToAdd = array_diff($customerGroupIds, $existingGroups);
+        // Визначаємо групи, які треба видалити
+        $groupsToRemove = array_diff($existingGroups, $customerGroupIds);
+
+        $connection = $this->holidayCustomerGroupFactory->create()->getResource()->getConnection();
+        $tableName = $connection->getTableName('tenguyama_holiday_customer_groups');
+
+        if (!empty($groupsToRemove)) {
+            $connection->delete($tableName, [
+                'holiday_id = ?' => $holidayId,
+                'customer_group_id IN (?)' => $groupsToRemove
+            ]);
+        }
+
+        foreach ($groupsToAdd as $groupId) {
+            $newEntry = $this->holidayCustomerGroupFactory->create();
+            $newEntry->setData([
+                'holiday_id' => $holidayId,
+                'customer_group_id' => $groupId
+            ]);
+            $newEntry->save();
+        }
     }
 
 }

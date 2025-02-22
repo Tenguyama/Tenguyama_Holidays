@@ -1,0 +1,19 @@
+{
+    "tenguyama_holidays": {
+        "column": {
+            "holiday_id": true,
+            "name": true,
+            "start_date": true,
+            "end_date": true,
+            "exact_date": true,
+            "greeting_text": true,
+            "is_active": true
+        },
+        "index": {
+            "TENGUYAMA_HOLIDAYS_START_DATE_END_DATE": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

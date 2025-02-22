@@ -9,16 +9,9 @@ use Tenguyama\Holidays\Model\ResourceModel\Holiday\CollectionFactory;
 
 class MassStatus extends Action
 {
+    protected Filter $filter;
 
-    /**
-     * @var Filter
-     */
-    protected $filter;
-
-    /**
-     * @var CollectionFactory
-     */
-    protected $collectionFactory;
+    protected CollectionFactory $collectionFactory;
 
     /**
      * @param Context           $context

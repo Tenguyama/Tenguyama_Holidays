@@ -8,10 +8,6 @@ class Collection extends AbstractCollection
 {
     protected $_idFieldName = 'holiday_id';
     protected $_eventPrefix = 'tenguyama_holidays_holiday_collection';
-//    protected $_eventObject = 'holiday_collection';
-//    protected $_itemIdFieldName = 'holiday_id';
-//    protected $_model = HolidayModel::class;
-//    protected $_resourceModel = HolidayResourceModel::class;
     protected function _construct()
     {
         $this->_init(

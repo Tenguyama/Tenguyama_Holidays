@@ -291,6 +291,21 @@
                 </item>
             </argument>
         </column>
+
+
+<!--        Колонка значення знижки яку ми додали патчем -->
+        <column name="discount">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Discount</item>
+                    <item name="sortable" xsi:type="boolean">true</item>
+                    <item name="sortOrder" xsi:type="number">4</item>
+                </item>
+            </argument>
+        </column>
+<!--        Колонка значення знижки яку ми додали патчем -->
+
+
         <column name="start_date"
                 class="Magento\Ui\Component\Listing\Columns\Date">
             <argument name="data" xsi:type="array">
@@ -300,7 +315,7 @@
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="label" xsi:type="string" translate="true">Start Date</item>
                     <item name="dateFormat" xsi:type="string">dd-MM-yyyy HH:mm:ss</item>
-                    <item name="sortOrder" xsi:type="number">4</item>
+                    <item name="sortOrder" xsi:type="number">5</item>
                 </item>
             </argument>
         </column>
@@ -313,7 +328,7 @@
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="label" xsi:type="string" translate="true">End Date</item>
                     <item name="dateFormat" xsi:type="string">dd-MM-yyyy HH:mm:ss</item>
-                    <item name="sortOrder" xsi:type="number">5</item>
+                    <item name="sortOrder" xsi:type="number">6</item>
                 </item>
             </argument>
         </column>
@@ -326,7 +341,7 @@
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="label" xsi:type="string" translate="true">Exact Date</item>
                     <item name="dateFormat" xsi:type="string">dd-MM-yyyy HH:mm:ss</item>
-                    <item name="sortOrder" xsi:type="number">6</item>
+                    <item name="sortOrder" xsi:type="number">7</item>
                 </item>
             </argument>
         </column>
@@ -350,7 +365,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="label" xsi:type="string" translate="true">Status</item>
-                    <item name="sortOrder" xsi:type="number">7</item>
+                    <item name="sortOrder" xsi:type="number">99</item>
                 </item>
             </argument>
         </column>
@@ -361,7 +376,7 @@
                     <item name="resizeEnabled" xsi:type="boolean">false</item>
                     <item name="resizeDefaultWidth" xsi:type="string">107</item>
                     <item name="indexField" xsi:type="string">holiday_id</item>
-                    <item name="sortOrder" xsi:type="number">180</item>
+                    <item name="sortOrder" xsi:type="number">999</item>
                 </item>
             </argument>
         </actionsColumn>
