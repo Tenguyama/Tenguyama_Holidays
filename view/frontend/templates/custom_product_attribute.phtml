@@ -1,0 +1,11 @@
+<?php
+/** @var \Tenguyama\Holidays\Block\CustomAttribute $block */
+
+    $attribute = $block->getHolidayProductAttribute();
+    if (!empty($attribute)) :
+        ?>
+        <div class="custom-product-attribute">
+            <b><?= $attribute ?></b>
+        </div>
+    <?php endif; ?>
+

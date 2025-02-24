@@ -8,5 +8,17 @@
                    before="breadcrumbs"
             />
         </referenceContainer>
+        <referenceBlock name="category.products.list.item">
+            <block class="Tenguyama\Holidays\Block\CustomAttribute"
+                   name="holiday_product_attribute"
+                   as="holiday_product_attribute"
+                   template="Tenguyama_Holidays::custom_category_attribute.phtml"
+                   after="product.name">
+<!--                <arguments>-->
+<!--                    <argument name="productId" xsi:type="string" translate="true">{$block->getProduct()->getId()}</argument>-->
+                    <!--                    <argument name="product" xsi:type="object">Magento\Catalog\Model\Product</argument>-->
+<!--                </arguments>-->
+            </block>
+        </referenceBlock>
     </body>
 </page>

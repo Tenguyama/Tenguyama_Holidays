@@ -189,31 +189,85 @@
                     </item>
                 </argument>
             </action>
-            <action name="change_status">
-                <settings>
-                    <type>change_status</type>
-                    <label translate="true">Change Status</label>
-                    <actions class="Tenguyama\Holidays\Ui\Component\MassAction\Status\Options"/>
-                </settings>
+
+            <action name="change_status_active">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">change_status_active</item>
+                        <item name="label" xsi:type="string" translate="true">Change status Active</item>
+<!--                        <item name="value" xsi:type="string">1</item>-->
+<!--                        <item name="paramName" xsi:type="string">status</item>-->
+<!--                        <item name="url" xsi:type="url" path="tenguyama_holidays/index/massStatus" />-->
+                        <item name="url" xsi:type="url" path="tenguyama_holidays/index/massStatus/status/1" />
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Active items</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure you don't want to make the selected items active?</item>
+                        </item>
+                    </item>
+                </argument>
             </action>
+            <action name="change_status_inactive">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">change_status_inactive</item>
+                        <item name="label" xsi:type="string" translate="true">Change status Inactive</item>
+<!--                        <item name="value" xsi:type="string">0</item>-->
+<!--                        <item name="paramName" xsi:type="string">status</item>-->
+<!--                        <item name="url" xsi:type="url" path="tenguyama_holidays/index/massStatus" />-->
+                        <item name="url" xsi:type="url" path="tenguyama_holidays/index/massStatus/status/0" />
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Inactive items</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure you don't want to make the selected items inactive?</item>
+                        </item>
+                    </item>
+                </argument>
+            </action>
+
 <!--            <action name="change_status">-->
 <!--                <argument name="data" xsi:type="array">-->
 <!--                    <item name="config" xsi:type="array">-->
 <!--                        <item name="type" xsi:type="string">change_status</item>-->
 <!--                        <item name="label" xsi:type="string" translate="true">Change status</item>-->
+<!--                        <item name="confirm" xsi:type="array">-->
+<!--                            <item name="title" xsi:type="string" translate="true">22222222222222</item>-->
+<!--                            <item name="message" xsi:type="string" translate="true">2222222222222</item>-->
+<!--                        </item>-->
+<!--                    </item>-->
+<!--                    <item name="confirm" xsi:type="array">-->
+<!--                        <item name="title" xsi:type="string" translate="true">11111111111111</item>-->
+<!--                        <item name="message" xsi:type="string" translate="true">11111111111111</item>-->
 <!--                    </item>-->
 <!--                </argument>-->
-<!--                <argument name="actions" xsi:type="configurableObject">-->
-<!--                    <argument name="class" xsi:type="string">Tenguyama\Holidays\Ui\Component\MassAction\Status\Options</argument>-->
-<!--                    <argument name="data" xsi:type="array">-->
-<!--                        <item name="urlPath" xsi:type="string">*/*/massStatus</item>-->
-<!--                        <item name="paramName" xsi:type="string">status</item>-->
-<!--                        <item name="confirm" xsi:type="array">-->
-<!--                            <item name="title" xsi:type="string" translate="true">Update items status</item>-->
-<!--                            <item name="message" xsi:type="string" translate="true">Are you sure you wan't to update selected items status?</item>-->
+<!--                    <argument name="actions" xsi:type="array">-->
+<!--                        <item name="0" xsi:type="array">-->
+<!--                            <item name="value" xsi:type="string">0</item>-->
+<!--                            <item name="label" xsi:type="string" translate="true">Inactive</item>-->
+<!--                            &lt;!&ndash;                            <item name="paramName" xsi:type="string">status</item>&ndash;&gt;-->
+<!--                            &lt;!&ndash;                            <item name="url" xsi:type="url" path="tenguyama_holidays/index/massStatus?status=0" />&ndash;&gt;-->
+<!--                            <item name="url" xsi:type="url" path="tenguyama_holidays/index/massStatus/status/0" />-->
+<!--                            <item name="url" xsi:type="url" path="tenguyama_holidays/index/massStatus/status/0" />-->
+<!--                            &lt;!&ndash;                            <item name="url" xsi:type="url" path="tenguyama_holidays/index/massStatus/0" />&ndash;&gt;-->
+<!--                            <item name="confirm" xsi:type="array">-->
+<!--                                <item name="title" xsi:type="string" translate="true">Inactive items</item>-->
+<!--                                <item name="message" xsi:type="string" translate="true">Are you sure you don't want to make the selected items inactive?</item>-->
+<!--                            </item>-->
 <!--                        </item>-->
+<!--                        <item name="1" xsi:type="array">-->
+<!--                            <item name="value" xsi:type="string">1</item>-->
+<!--                            <item name="label" xsi:type="string" translate="true">Active</item>-->
+<!--&lt;!&ndash;                            <item name="paramName" xsi:type="string">status</item>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <item name="url" xsi:type="url" path="tenguyama_holidays/index/massStatus?status=1" />&ndash;&gt;-->
+<!--&lt;!&ndash;                            <item name="url" xsi:type="url" path="tenguyama_holidays/index/massStatus/status/1" />&ndash;&gt;-->
+<!--                            <item name="url" xsi:type="url" path="tenguyama_holidays/index/massStatus/status/{{value}}" />-->
+<!--&lt;!&ndash;                            <item name="url" xsi:type="url" path="tenguyama_holidays/index/massStatus/1"/>&ndash;&gt;-->
+<!--                            <item name="confirm" xsi:type="array">-->
+<!--                                <item name="title" xsi:type="string" translate="true">Active items</item>-->
+<!--                                <item name="message" xsi:type="string" translate="true">Are you sure you don't want to make the selected items active?</item>-->
+<!--                            </item>-->
+<!--                        </item>-->
+
 <!--                    </argument>-->
-<!--                </argument>-->
+
 <!--            </action>-->
 
         </massaction>

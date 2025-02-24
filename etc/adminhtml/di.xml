@@ -23,19 +23,30 @@
             <argument name="resourceModel" xsi:type="string">Tenguyama\Holidays\Model\ResourceModel\Holiday</argument>
         </arguments>
     </type>
-<!--    TODO функціонал масової зміни активності не працює (нема значень для вибору), поки не зрозумів в чому проблема -->
-    <type name="Tenguyama\Holidays\Ui\Component\MassAction\Status\Options">
-        <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="urlPath" xsi:type="string">*/*/massStatus</item>
-                <item name="paramName" xsi:type="string">status</item>
-                <item name="confirm" xsi:type="array">
-                    <item name="title" xsi:type="string" translatable="true">Change Status</item>
-                    <item name="message" xsi:type="string" translatable="true">Are you sure you wan't to update selected items status?</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
+<!--    <type name="Tenguyama\Holidays\Ui\Component\MassAction\Status\Options">-->
+<!--        <arguments>-->
+<!--            <argument name="data" xsi:type="array">-->
+<!--                <item name="urlPath" xsi:type="string">*/*/massStatus</item>-->
+<!--                <item name="paramName" xsi:type="string">status</item>-->
+<!--                <item name="confirm" xsi:type="array">-->
+<!--                    <item name="title" xsi:type="string" translatable="true">Change Status</item>-->
+<!--                    <item name="message" xsi:type="string" translatable="true">Are you sure you wan't to update selected items status?</item>-->
+<!--                </item>-->
+<!--            </argument>-->
+<!--        </arguments>-->
+<!--    </type>-->
+
+<!--    <virtualType name="Tenguyama\Holidays\Ui\Component\MassAction\Status\Options" type="Magento\Ui\Component\MassAction\Filter\Options">-->
+<!--        <arguments>-->
+<!--            <argument name="data" xsi:type="array">-->
+<!--                <item name="urlPath" xsi:type="string">*/*/massStatus</item>-->
+<!--                <item name="paramName" xsi:type="string">status</item>-->
+<!--            </argument>-->
+<!--        </arguments>-->
+<!--    </virtualType>-->
+
+
+
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">

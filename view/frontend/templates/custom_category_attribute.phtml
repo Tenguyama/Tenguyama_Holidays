@@ -1,0 +1,13 @@
+<?php
+/** @var \Tenguyama\Holidays\Block\CustomAttribute $block */
+//$productId = $block->getData('productId');
+$product = $block->getData('product');
+if($product):
+    $attribute = $block->getCategoryProductAttribute($product->getId());
+
+    if (!empty($attribute)): ?>
+        <div class="custom-category-attribute">
+            <b><?= $attribute ?></b>
+        </div>
+    <?php endif; ?>
+<?php endif; ?>

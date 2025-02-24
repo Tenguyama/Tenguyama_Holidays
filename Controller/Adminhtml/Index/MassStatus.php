@@ -37,6 +37,11 @@ class MassStatus extends Action
     public function execute()
     {
 
+//        echo '<pre>';
+//        var_dump($this->getRequest()->getParams());
+//        echo '</pre>';
+//        die;
+
         $statusValue = $this->getRequest()->getParam('status');
         $collection = $this->filter->getCollection($this->collectionFactory->create());
 

@@ -97,4 +97,10 @@ class HolidayViewModel implements ArgumentInterface
     {
         return $this->_registry->registry('current_product');
     }
+
+    public function getCategoryProducts()
+    {
+        return $this->_registry->registry('current_category')->getProductCollection();
+    }
+
 }
