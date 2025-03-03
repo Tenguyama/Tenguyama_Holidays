@@ -110,7 +110,8 @@ class HolidayViewModel implements ArgumentInterface
             return null;
         }
 
-        $oldPrice = $product->getFinalPrice();
+//        $oldPrice = $product->getFinalPrice();
+        $oldPrice = $product->getOrigData('price');
         return $this->priceHelper->currency($oldPrice, true, false);
 
     }
@@ -122,6 +123,7 @@ class HolidayViewModel implements ArgumentInterface
         }
 
         return $product->getFinalPrice() < $product->getData('price');
+//        return $product->getOrigData('price') < $product->getData('price');
     }
 
 
