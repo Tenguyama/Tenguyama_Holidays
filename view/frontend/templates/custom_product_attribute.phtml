@@ -1,11 +1,11 @@
 <?php
-/** @var \Tenguyama\Holidays\Block\CustomAttribute $block */
-
-    $attribute = $block->getHolidayProductAttribute();
-    if (!empty($attribute)) :
-        ?>
-        <div class="custom-product-attribute">
-            <b><?= $attribute ?></b>
-        </div>
-    <?php endif; ?>
-
+/** @var Magento\Framework\View\Element\Template $block */
+/** @var Tenguyama\Holidays\ViewModel\HolidayViewModel $_holidayViewModel */
+    $_holidayViewModel = $block->getData('holiday_view_model');
+    $attribute = $_holidayViewModel->getHolidayProductAttribute($_holidayViewModel->getCurrentProduct());
+        if (!empty($attribute)) :
+            ?>
+            <div class="custom-product-attribute">
+                <b><?= $attribute ?></b>
+            </div>
+        <?php endif; ?>

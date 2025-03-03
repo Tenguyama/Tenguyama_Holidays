@@ -27,8 +27,11 @@ class ChangeProductPrice {
                     // Якщо знижка є, застосовуємо її до ціни
                     $discountedPrice = $result - ($result * ($discount / 100));
 
+
                     // Встановлюємо знижку як спеціальну ціну
-                    $subject->setSpecialPrice($discountedPrice);
+                    // $subject->setSpecialPrice($discountedPrice);
+
+                    return $discountedPrice;
                 }
             }
         }

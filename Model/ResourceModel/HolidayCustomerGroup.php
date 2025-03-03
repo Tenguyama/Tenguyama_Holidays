@@ -7,6 +7,11 @@ class HolidayCustomerGroup extends AbstractDb
 
     protected function _construct()
     {
-        $this->_init('tenguyama_holiday_customer_groups', null);
+        $this->_init('tenguyama_holiday_customer_groups', 'id');
+    }
+
+    public function getIdFieldName()
+    {
+        return 'id';
     }
 }

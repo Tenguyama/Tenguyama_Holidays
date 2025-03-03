@@ -3,20 +3,34 @@
 namespace Tenguyama\Holidays\Setup\Patch\Data;
 
 use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Eav\Api\AttributeGroupRepositoryInterface;
+use Magento\Eav\Model\Entity\Attribute\GroupFactory;
+use Magento\Eav\Model\Entity\Attribute\SetFactory;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 class InstallProductAttribute implements DataPatchInterface
 {
     private ModuleDataSetupInterface $moduleDataSetup;
     private EavSetupFactory $eavSetupFactory;
+    private SetFactory $attributeSetFactory;
+    private AttributeGroupRepositoryInterface $attributeGroupRepository;
+    private SearchCriteriaBuilder $searchCriteriaBuilder;
 
     public function __construct(
         ModuleDataSetupInterface $moduleDataSetup,
-        EavSetupFactory $eavSetupFactory
+        EavSetupFactory $eavSetupFactory,
+        SetFactory $attributeSetFactory,
+        AttributeGroupRepositoryInterface $attributeGroupRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
         $this->eavSetupFactory = $eavSetupFactory;
+        $this->attributeSetFactory = $attributeSetFactory;
+        $this->attributeGroupRepository = $attributeGroupRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     public function apply()
@@ -50,31 +64,49 @@ class InstallProductAttribute implements DataPatchInterface
             ]
         );
 
-        /**
-         * TODO я не впевнений що цей варіант правильний.
-         * Але ціль виконується, а саме переглянувши які зв'язки у атрибута NEW (147 id у мене в бд)
-         * Так як не зрозуміло який з product-details відповідає за відображення в адмінці (цих груп 5 з id: 7,30,40,50,60,70,80,90)
-         * У всіх них різні attr_set_id, які як я зрозумів один з них дефолтний - інші під категорії (Bag\Gear і тд)
-         * і типу якщо я беру $attributeSetId = $eavSetup->getDefaultAttributeSetId(\Magento\Catalog\Model\Product::ENTITY);
-         * то додаю атрибут тільки в дефолтний продутк детейлс (id 7), через що в категоріях де є свій продукт детейлс мій атрибут не відображається
-         */
         // Запит на отримання всіх груп з кодом "product-details"
-        $connection = $this->moduleDataSetup->getConnection();
-        $select = $connection->select()
-            ->from(['eag' => $connection->getTableName('eav_attribute_group')])
-            ->where('eag.attribute_group_code = ?', 'product-details');
+//        $connection = $this->moduleDataSetup->getConnection();
+//        $select = $connection->select()
+//            ->from(['eag' => $connection->getTableName('eav_attribute_group')])
+//            ->where('eag.attribute_group_code = ?', 'product-details');
+//
+//        $attributeGroups = $connection->fetchAll($select);
+//
+//        // Проходимо по всіх групах і додаємо атрибут
+//        foreach ($attributeGroups as $attributeGroup) {
+//            $eavSetup->addAttributeToGroup(
+//                \Magento\Catalog\Model\Product::ENTITY,
+//                $attributeGroup['attribute_set_id'],
+//                $attributeGroup['attribute_group_id'],
+//                'is_festive',
+//                9999
+//            );
+//        }
 
-        $attributeGroups = $connection->fetchAll($select);
+//  Варіант без "прямого запиту до бд"
+        $attributeSets = $this->attributeSetFactory->create()->getCollection();
 
-        // Проходимо по всіх групах і додаємо атрибут
-        foreach ($attributeGroups as $attributeGroup) {
-            $eavSetup->addAttributeToGroup(
-                \Magento\Catalog\Model\Product::ENTITY,
-                $attributeGroup['attribute_set_id'],
-                $attributeGroup['attribute_group_id'],
-                'is_festive',
-                9999
-            );
+        foreach ($attributeSets as $attributeSet) {
+            $attributeSetId = $attributeSet->getId();
+
+            // Отримуємо групу "product-details" для цього атрибут-сету
+            $searchCriteria = $this->searchCriteriaBuilder
+                ->addFilter('attribute_group_code', 'product-details', 'eq')
+                ->addFilter('attribute_set_id', $attributeSetId, 'eq')
+                ->create();
+            $attributeGroupCollection = $this->attributeGroupRepository->getList($searchCriteria);
+
+            foreach ($attributeGroupCollection->getItems() as $attributeGroup) {
+                if ($attributeGroup->getAttributeGroupCode() === 'product-details') {
+                    $eavSetup->addAttributeToGroup(
+                        Product::ENTITY,
+                        $attributeSetId,
+                        $attributeGroup->getAttributeGroupId(),
+                        'is_festive',
+                        9999
+                    );
+                }
+            }
         }
 
         $this->moduleDataSetup->endSetup();

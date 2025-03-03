@@ -30,18 +30,30 @@ class CreateHolidayCustomerGroupTable implements SchemaPatchInterface
         if (!$setup->getConnection()->isTableExists($setup->getTable('tenguyama_holiday_customer_groups'))) {
             $table = $setup->getConnection()->newTable($setup->getTable('tenguyama_holiday_customer_groups'))
                 ->addColumn(
+                    'id',
+                    Table::TYPE_INTEGER,
+                    null,
+                    ['nullable' => false, 'unsigned' => true, 'primary' => true, 'identity' => true],
+                    'ID'
+                )
+                ->addColumn(
                     'holiday_id',
                     Table::TYPE_INTEGER,
                     null,
-                    ['nullable' => false, 'unsigned' => true, 'primary' => true],
+                    ['nullable' => false, 'unsigned' => true],
                     'Holiday ID'
                 )
                 ->addColumn(
                     'customer_group_id',
                     Table::TYPE_INTEGER,
                     null,
-                    ['nullable' => false, 'unsigned' => true, 'primary' => true],
+                    ['nullable' => false, 'unsigned' => true],
                     'Customer Group ID'
+                )
+                ->addIndex(
+                    $schemaSetup->getIdxName('tenguyama_holiday_customer_groups', ['holiday_id', 'customer_group_id'], \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE),
+                    ['holiday_id', 'customer_group_id'],
+                    ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
                 )
                 ->addForeignKey(
                     $schemaSetup->getFkName('tenguyama_holiday_customer_groups', 'holiday_id', 'tenguyama_holidays', 'holiday_id'),

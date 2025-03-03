@@ -10,10 +10,11 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Tenguyama\Holidays\Model\Holiday;
 use Tenguyama\Holidays\Model\HolidayCustomerGroupFactory;
 use Tenguyama\Holidays\Model\ResourceModel\HolidayCustomerGroup\CollectionFactory as HolidayCustomerGroupCollectionFactory;
+use Tenguyama\Holidays\Model\ResourceModel\Holiday\CollectionFactory as HolidayCollectionFactory;
 
 
 class Save extends Action{
-
+    protected HolidayCollectionFactory $holidayCollectionFactory;
     protected HolidayCustomerGroupFactory $holidayCustomerGroupFactory;
     protected HolidayCustomerGroupCollectionFactory $holidayCustomerGroupCollectionFactory;
     protected Holiday $holidayModel;
@@ -26,6 +27,7 @@ class Save extends Action{
         TimezoneInterface $timezone,
         Holiday $holidayModel,
         Session $adminsession,
+        HolidayCollectionFactory $holidayCollectionFactory,
         HolidayCustomerGroupFactory $holidayCustomerGroupFactory,
         HolidayCustomerGroupCollectionFactory $holidayCustomerGroupCollectionFactory
     ){
@@ -33,6 +35,7 @@ class Save extends Action{
         $this->holidayModel = $holidayModel;
         $this->adminsession = $adminsession;
         $this->timezone = $timezone;
+        $this->holidayCollectionFactory = $holidayCollectionFactory;
         $this->holidayCustomerGroupFactory = $holidayCustomerGroupFactory;
         $this->holidayCustomerGroupCollectionFactory = $holidayCustomerGroupCollectionFactory;
     }
@@ -75,7 +78,7 @@ class Save extends Action{
 
             return $this->handleRedirect($holiday);
         } catch (\Exception $e) {
-            return $this->returnWithError(__('Something went wrong while saving the Holiday.'), $holidayId);
+            return $this->returnWithError(__('Something went wrong while saving the Holiday.' . $e->getMessage()), $holidayId);
         }
     }
 
@@ -118,27 +121,38 @@ class Save extends Action{
      */
     private function isOverlappingHoliday($startDate, $endDate, $holidayId = null)
     {
-        $connection = $this->holidayModel->getResource()->getConnection();
+// Старий варіант - Підготовлений запит, переробляємо бо пряме звернення до бд - погана практика
+//        $connection = $this->holidayModel->getResource()->getConnection();
+//        $select = $connection->select()
+//            ->from($this->holidayModel->getResource()->getTable('tenguyama_holidays'),
+//                ['count' => new \Zend_Db_Expr('COUNT(*)')]
+//            )
+//            ->where("
+//                holiday_id != '".$holidayId."'
+//                AND
+//                (
+//                    (start_date <= '".$startDate."' AND end_date >= '".$startDate."')
+//                    OR
+//                    (start_date <= '".$endDate."' AND end_date >= '".$endDate."')
+//                    OR
+//                    (start_date >= '".$startDate."'  AND end_date <= '".$endDate."' )
+//                )
+//            ");
+//        $result = $connection->fetchOne($select);
+//        return (int)$result > 0;
 
-        // Підготовлений запит
-        $select = $connection->select()
-            ->from($this->holidayModel->getResource()->getTable('tenguyama_holidays'),
-                ['count' => new \Zend_Db_Expr('COUNT(*)')]
-            )
-            ->where("
-                holiday_id != '".$holidayId."'
-                AND
-                (
-                    (start_date <= '".$startDate."' AND end_date >= '".$startDate."')
-                    OR
-                    (start_date <= '".$endDate."' AND end_date >= '".$endDate."')
-                    OR
-                    (start_date >= '".$startDate."'  AND end_date <= '".$endDate."' )
-                )
-            ");
 
-        $result = $connection->fetchOne($select);
-        return (int)$result > 0;
+// Новий варіант, спрощений
+        $collection = $this->holidayCollectionFactory->create()
+            ->addFieldToFilter('holiday_id', ['neq' => $holidayId])
+            ->addFieldToFilter(
+                    ['start_date', 'end_date'],
+                    [
+                        ['lteq' => $endDate],
+                        ['gteq' => $startDate]
+                    ]
+                );
+        return $collection->count() > 0;
     }
     private function convertToUtc($date, $userTimezone)
     {
@@ -183,29 +197,15 @@ class Save extends Action{
      */
     protected function saveCustomerGroups($holidayId, $customerGroupIds)
     {
-        // Отримуємо всі поточні групи для цього holiday_id
-        $existingGroups = $this->holidayCustomerGroupCollectionFactory->create()
-            ->addFieldToFilter('holiday_id', $holidayId)
-            ->getColumnValues('customer_group_id');
-
         $customerGroupIds = array_map('intval', (array) $customerGroupIds);
 
-        // Визначаємо групи, які треба додати
-        $groupsToAdd = array_diff($customerGroupIds, $existingGroups);
-        // Визначаємо групи, які треба видалити
-        $groupsToRemove = array_diff($existingGroups, $customerGroupIds);
-
-        $connection = $this->holidayCustomerGroupFactory->create()->getResource()->getConnection();
-        $tableName = $connection->getTableName('tenguyama_holiday_customer_groups');
-
-        if (!empty($groupsToRemove)) {
-            $connection->delete($tableName, [
-                'holiday_id = ?' => $holidayId,
-                'customer_group_id IN (?)' => $groupsToRemove
-            ]);
+        $collection = $this->holidayCustomerGroupCollectionFactory->create()
+                ->addFieldToFilter('holiday_id', $holidayId);
+        foreach ($collection as $item) {
+            $item->delete();
         }
 
-        foreach ($groupsToAdd as $groupId) {
+        foreach ($customerGroupIds as $groupId) {
             $newEntry = $this->holidayCustomerGroupFactory->create();
             $newEntry->setData([
                 'holiday_id' => $holidayId,

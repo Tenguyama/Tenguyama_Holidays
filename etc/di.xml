@@ -23,27 +23,7 @@
             <argument name="resourceModel" xsi:type="string">Tenguyama\Holidays\Model\ResourceModel\Holiday</argument>
         </arguments>
     </type>
-<!--    <type name="Tenguyama\Holidays\Ui\Component\MassAction\Status\Options">-->
-<!--        <arguments>-->
-<!--            <argument name="data" xsi:type="array">-->
-<!--                <item name="urlPath" xsi:type="string">*/*/massStatus</item>-->
-<!--                <item name="paramName" xsi:type="string">status</item>-->
-<!--                <item name="confirm" xsi:type="array">-->
-<!--                    <item name="title" xsi:type="string" translatable="true">Change Status</item>-->
-<!--                    <item name="message" xsi:type="string" translatable="true">Are you sure you wan't to update selected items status?</item>-->
-<!--                </item>-->
-<!--            </argument>-->
-<!--        </arguments>-->
-<!--    </type>-->
 
-<!--    <virtualType name="Tenguyama\Holidays\Ui\Component\MassAction\Status\Options" type="Magento\Ui\Component\MassAction\Filter\Options">-->
-<!--        <arguments>-->
-<!--            <argument name="data" xsi:type="array">-->
-<!--                <item name="urlPath" xsi:type="string">*/*/massStatus</item>-->
-<!--                <item name="paramName" xsi:type="string">status</item>-->
-<!--            </argument>-->
-<!--        </arguments>-->
-<!--    </virtualType>-->
 
 
 
@@ -52,6 +32,24 @@
             <argument name="collections" xsi:type="array">
                 <item name="tenguyama_holidays_holiday_listing_data_source" xsi:type="string">Tenguyama\Holidays\Model\ResourceModel\Holiday\Grid\Collection</item>
             </argument>
+        </arguments>
+    </type>
+
+
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="change_product"
+                type="Tenguyama\Holidays\Plugin\ChangeProductPrice" sortOrder="1"
+                disabled="false" />
+    </type>
+    <type name="Tenguyama\Holidays\ViewModel\HolidayViewModel">
+        <arguments>
+            <argument name="registry" xsi:type="object">Magento\Framework\Registry</argument>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session</argument>
+            <argument name="timezone" xsi:type="object">Magento\Framework\Stdlib\DateTime\TimezoneInterface</argument>
+            <argument name="scopeConfig" xsi:type="object">Magento\Framework\App\Config\ScopeConfigInterface</argument>
+            <argument name="holidayCollectionFactory" xsi:type="object">Tenguyama\Holidays\Model\ResourceModel\Holiday\CollectionFactory</argument>
+            <argument name="holidayCustomerGroupCollectionFactory" xsi:type="object">Tenguyama\Holidays\Model\ResourceModel\HolidayCustomerGroup\CollectionFactory</argument>
+            <argument name="productCollectionFactory" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\CollectionFactory</argument>
         </arguments>
     </type>
 </config>

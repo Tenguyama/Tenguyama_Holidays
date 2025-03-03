@@ -9,12 +9,25 @@
             />
         </referenceContainer>
         <referenceContainer name="product.info.main">
-            <block class="Tenguyama\Holidays\Block\CustomAttribute"
+            <block class="Magento\Framework\View\Element\Template"
+                   name="product.new.price"
+                   template="Tenguyama_Holidays::custom_old_price.phtml"
+                   after="product.info.price"
+                   before="product_custom_attribute">
+                <arguments>
+                    <argument name="holiday_view_model" xsi:type="object">Tenguyama\Holidays\ViewModel\HolidayViewModel</argument>
+                </arguments>
+            </block>
+            <!--                class="Tenguyama\Holidays\Block\CustomAttribute"-->
+            <block class="Magento\Framework\View\Element\Template"
                    name="product_custom_attribute"
                    template="Tenguyama_Holidays::custom_product_attribute.phtml"
                    after="product.info.price"
-                   before="product.price.tier"
-            />
+                   before="product.price.tier">
+                <arguments>
+                    <argument name="holiday_view_model" xsi:type="object">Tenguyama\Holidays\ViewModel\HolidayViewModel</argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>

@@ -1,0 +1,17 @@
+<?php
+/** @var Magento\Framework\View\Element\Template $block */
+/** @var Tenguyama\Holidays\ViewModel\HolidayViewModel $_holidayViewModel*/
+$_holidayViewModel = $block->getData('holiday_view_model');
+
+$_currentProduct = $_holidayViewModel->getCurrentProduct();
+$hasSpecialPrice = $_holidayViewModel->hasSpecialPrice($_currentProduct);
+
+if ($hasSpecialPrice && $_currentProduct->getIsFestive() == '1'):
+    $oldPrice = $_holidayViewModel->getOldPrice($_currentProduct);
+    ?>
+
+    <div class="product-pricing">
+        <span class="special-price"><?= __('Old Price:') ?> <b><?= $oldPrice ?></b></span>
+    </div>
+
+<?php endif; ?>

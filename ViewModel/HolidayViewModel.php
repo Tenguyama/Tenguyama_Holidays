@@ -11,14 +11,16 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Tenguyama\Holidays\Model\ResourceModel\Holiday\CollectionFactory as HolidayCollectionFactory;
 use Tenguyama\Holidays\Model\ResourceModel\HolidayCustomerGroup\CollectionFactory as HolidayCustomerGroupCollectionFactory;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\Framework\Pricing\Helper\Data as PriceHelper;
 class HolidayViewModel implements ArgumentInterface
 {
+    protected PriceHelper $priceHelper;
     private Registry $_registry;
     private HolidayCollectionFactory $holidayCollectionFactory;
     private HolidayCustomerGroupCollectionFactory $holidayCustomerGroupCollectionFactory;
+    private ProductCollectionFactory $productCollectionFactory;
     private TimezoneInterface $timezone;
-
     private ScopeConfigInterface $scopeConfig;
     protected Session $customerSession;
     private const XML_PATH_ENABLED = 'holidays/general/enable';
@@ -28,14 +30,18 @@ class HolidayViewModel implements ArgumentInterface
         Session $customerSession,
         TimezoneInterface $timezone,
         ScopeConfigInterface $scopeConfig,
+        PriceHelper $priceHelper,
         HolidayCollectionFactory $holidayCollectionFactory,
-        HolidayCustomerGroupCollectionFactory $holidayCustomerGroupCollectionFactory
+        HolidayCustomerGroupCollectionFactory $holidayCustomerGroupCollectionFactory,
+        ProductCollectionFactory $productCollectionFactory
     ) {
         $this->_registry = $registry;
         $this->timezone = $timezone;
         $this->scopeConfig = $scopeConfig;
+        $this->priceHelper = $priceHelper;
         $this->holidayCollectionFactory = $holidayCollectionFactory;
         $this->holidayCustomerGroupCollectionFactory = $holidayCustomerGroupCollectionFactory;
+        $this->productCollectionFactory = $productCollectionFactory;
         $this->customerSession = $customerSession;
     }
 
@@ -98,9 +104,44 @@ class HolidayViewModel implements ArgumentInterface
         return $this->_registry->registry('current_product');
     }
 
-    public function getCategoryProducts()
+    public function getOldPrice($product)
     {
-        return $this->_registry->registry('current_category')->getProductCollection();
+        if (!$product) {
+            return null;
+        }
+
+        $oldPrice = $product->getFinalPrice();
+        return $this->priceHelper->currency($oldPrice, true, false);
+
     }
+
+    public function hasSpecialPrice($product)
+    {
+        if (!$product) {
+            return false;
+        }
+
+        return $product->getFinalPrice() < $product->getData('price');
+    }
+
+
+    public function getHolidayProductAttribute($product): ?string
+    {
+        if (!$product || $product->getIsFestive() != '1') {
+            return null;
+        }
+
+        $holiday = $this->getCurrentHoliday();
+        if (!$holiday || !$holiday->getId()) {
+            return null;
+        }
+
+        return sprintf(
+            "Festive discount: %s ",
+            $holiday->getDiscount()."%"
+        );
+    }
+
+
 
 }

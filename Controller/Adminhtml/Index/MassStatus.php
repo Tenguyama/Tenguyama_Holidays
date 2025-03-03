@@ -36,27 +36,11 @@ class MassStatus extends Action
      */
     public function execute()
     {
-
-//        echo '<pre>';
-//        var_dump($this->getRequest()->getParams());
-//        echo '</pre>';
-//        die;
-
         $statusValue = $this->getRequest()->getParam('status');
         $collection = $this->filter->getCollection($this->collectionFactory->create());
 
         foreach ($collection as $item) {
-//  так як "статус" у нас в таблиці це is_active,
-//  то використаю трохи іншу констрункцію,
-//  але в загальному функціонал масового ввімкнення\вимкнення св'ят є актуальним для даного завдання
-//            $item->setStatus($statusValue);
-
-
-
             $item->setIsActive($statusValue);
-//  на випадок якщо "магічний" метод __call() у AbstractModel не спарсить назву поля
-//            $item->setData('is_active', $statusValue);
-
             $item->save();
         }
 
